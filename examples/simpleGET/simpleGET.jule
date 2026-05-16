@@ -23,6 +23,6 @@ fn main() {
 
 fn handleStatus(code: status::StatusCode)! {
 	if !status::IsSuccess(code) {
-		error(code)
+		throw code
 	}
 }

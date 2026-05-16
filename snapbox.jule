@@ -11,22 +11,22 @@ BSD 3-Clause License
 use "snapbox/header"
 use "snapbox/status"
 
-cpp use "snapbox/internal/curlwrapper.hpp"
+extern use "snapbox/internal/curlwrapper.hpp"
 
 #typedef
-cpp struct Response {
+extern struct Response {
 	body:   str
 	status: status::StatusCode
 }
 
 /* args: url, headers, method */
-cpp fn request(str, []str, int): cpp.Response
+extern fn request(str, []str, int): extern.Response
 
 /* args: url, data, headers, method */
-cpp fn post(str, str, []str, int): cpp.Response
+extern fn post(str, str, []str, int): extern.Response
 
 /* args: url, path */
-cpp fn download(str, str): bool
+extern fn download(str, str): bool
 
 // Request structure for non-data requests.
 struct Request {
@@ -37,9 +37,9 @@ struct Request {
 
 impl Request {
 	// Executes the request and returns the response.
-	fn Send(*self): cpp.Response {
+	fn Send(*self): extern.Response {
 		headers := header::Slice(self.headers)
-		ret cpp.request(self.url, headers, self.method)
+		ret extern.request(self.url, headers, self.method)
 	}
 
 	// Sets headers for the request.
@@ -59,9 +59,9 @@ struct DataRequest {
 
 impl DataRequest {
 	// Executes the request and returns the response.
-	fn Send(*self): cpp.Response {
+	fn Send(*self): extern.Response {
 		headers := header::Slice(self.headers)
-		ret cpp.post(self.url, self.data, headers, self.method)
+		ret extern.post(self.url, self.data, headers, self.method)
 	}
 
 	// Sets headers for the request.
@@ -119,7 +119,7 @@ fn DELETE(url: str): DataRequest {
 
 // Uses the internal C++ function to download a file from the given URL and save it to the given path.
 fn Download(url: str, path: str)! {
-	response := cpp.download(url, path)
+	response := extern.download(url, path)
 	if !response {
 		panic("Download failed")
 	}
