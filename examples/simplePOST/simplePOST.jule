@@ -12,7 +12,7 @@ const DATA = "Hello, World!"
 
 fn main() {
 	let headerMap: header::HeaderMap = {
-		header::ACCEPT: "application/json",
+		header::ACCEPT:       "application/json",
 		header::CONTENT_TYPE: "text/plain",
 	}
 
@@ -26,6 +26,6 @@ fn main() {
 
 fn handleStatus(code: status::StatusCode)! {
 	if !status::IsSuccess(code) {
-		error(code)
+		throw code
 	}
 }

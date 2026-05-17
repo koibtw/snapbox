@@ -7,7 +7,7 @@
 use "example/snapbox"
 
 fn main() {
-	snapbox::Download("https://httpbin.org/get", "examples/bin/output.txt") else {
+	snapbox::Download("https://httpbin.org/get", "examples/output.txt") else {
 		println(error)
 	}
 }
