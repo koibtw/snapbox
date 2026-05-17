@@ -12,7 +12,7 @@ use "std/testing"
 #test
 fn slicing(t: &testing::T) {
 	let headerMap: HeaderMap = {
-		ACCEPT: "application/json",
+		ACCEPT:     "application/json",
 		USER_AGENT: "snapbox",
 	}
 

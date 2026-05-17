@@ -80,7 +80,7 @@ impl DataRequest {
 // Builds a GET request object.
 fn GET(url: str): Request {
 	ret Request{
-		url: url,
+		url:    url,
 		method: 0,
 	}
 }
@@ -88,7 +88,7 @@ fn GET(url: str): Request {
 // Builds a HEAD request object.
 fn HEAD(url: str): Request {
 	ret Request{
-		url: url,
+		url:    url,
 		method: 1,
 	}
 }
@@ -96,7 +96,7 @@ fn HEAD(url: str): Request {
 // Builds a POST request object.
 fn POST(url: str): DataRequest {
 	ret DataRequest{
-		url: url,
+		url:    url,
 		method: 0,
 	}
 }
@@ -104,7 +104,7 @@ fn POST(url: str): DataRequest {
 // Builds a PUT request object.
 fn PUT(url: str): DataRequest {
 	ret DataRequest{
-		url: url,
+		url:    url,
 		method: 1,
 	}
 }
@@ -112,7 +112,7 @@ fn PUT(url: str): DataRequest {
 // Builds a DELETE request object.
 fn DELETE(url: str): DataRequest {
 	ret DataRequest{
-		url: url,
+		url:    url,
 		method: 2,
 	}
 }

@@ -12,7 +12,7 @@ const DATA = "Puttin' on the Ritz..."
 
 fn main() {
 	let headerMap: header::HeaderMap = {
-		header::ACCEPT: "application/json",
+		header::ACCEPT:       "application/json",
 		header::CONTENT_TYPE: "text/plain",
 	}
 
