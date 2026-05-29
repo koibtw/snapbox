@@ -67,18 +67,20 @@ static Response request(const char *url, const __jule_Slice<__jule_Str> &headers
         return response;
     }
 
-    curl_easy_setopt(curl.get(), CURLOPT_URL, url);
-    curl_easy_setopt(curl.get(), CURLOPT_HTTPHEADER, headersList.get());
+    CURL* handle = curl.get();
+
+    curl_easy_setopt(handle, CURLOPT_URL, url);
+    curl_easy_setopt(handle, CURLOPT_HTTPHEADER, headersList.get());
 
     if (method == 0) { // GET
-        curl_easy_setopt(curl.get(), CURLOPT_WRITEFUNCTION, WriteCallback);
-        curl_easy_setopt(curl.get(), CURLOPT_WRITEDATA, &readBuffer);
+        curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, WriteCallback);
+        curl_easy_setopt(handle, CURLOPT_WRITEDATA, &readBuffer);
     } else if (method == 1) { // HEAD
-        curl_easy_setopt(curl.get(), CURLOPT_NOBODY, 1L);
+        curl_easy_setopt(handle, CURLOPT_NOBODY, 1L);
     }
 
-    res = curl_easy_perform(curl.get());
-    curl_easy_getinfo(curl.get(), CURLINFO_RESPONSE_CODE, &response.status);
+    res = curl_easy_perform(handle);
+    curl_easy_getinfo(handle, CURLINFO_RESPONSE_CODE, &response.status);
 
     if (method == 0) { // GET
         response.body = readBuffer;
@@ -100,25 +102,27 @@ static Response post(const char *url, const char *data, const __jule_Slice<__jul
         return response;
     }
 
-    curl_easy_setopt(curl.get(), CURLOPT_URL, url);
-    curl_easy_setopt(curl.get(), CURLOPT_HTTPHEADER, headersList.get());
+    CURL* handle = curl.get();
+
+    curl_easy_setopt(handle, CURLOPT_URL, url);
+    curl_easy_setopt(handle, CURLOPT_HTTPHEADER, headersList.get());
 
     if (method == 0) { // POST
-        curl_easy_setopt(curl.get(), CURLOPT_POST, 1L);
+        curl_easy_setopt(handle, CURLOPT_POST, 1L);
     } else if (method == 1) { // PUT
-        curl_easy_setopt(curl.get(), CURLOPT_CUSTOMREQUEST, "PUT");
+        curl_easy_setopt(handle, CURLOPT_CUSTOMREQUEST, "PUT");
     } else if (method == 2) { // DELETE
-        curl_easy_setopt(curl.get(), CURLOPT_CUSTOMREQUEST, "DELETE");
+        curl_easy_setopt(handle, CURLOPT_CUSTOMREQUEST, "DELETE");
     }
 
     if (data) {
-        curl_easy_setopt(curl.get(), CURLOPT_POSTFIELDS, data);
+        curl_easy_setopt(handle, CURLOPT_POSTFIELDS, data);
     }
-    curl_easy_setopt(curl.get(), CURLOPT_WRITEFUNCTION, WriteCallback);
-    curl_easy_setopt(curl.get(), CURLOPT_WRITEDATA, &readBuffer);
+    curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, WriteCallback);
+    curl_easy_setopt(handle, CURLOPT_WRITEDATA, &readBuffer);
 
-    res = curl_easy_perform(curl.get());
-    curl_easy_getinfo(curl.get(), CURLINFO_RESPONSE_CODE, &response.status);
+    res = curl_easy_perform(handle);
+    curl_easy_getinfo(handle, CURLINFO_RESPONSE_CODE, &response.status);
 
     response.body = readBuffer;
 
@@ -131,19 +135,21 @@ static bool download(__jule_Str url, __jule_Str filename) {
         return false;
     }
 
+    CURL* handle = curl.get();
+
     FilePtr file{openFile(filename, "wb")};
     if (!file) {
         return false;
     }
 
     // curl_easy_setopt is a macro, so implicit conversion don't happen.
-    curl_easy_setopt(curl.get(), CURLOPT_URL, (const char*)url);
-    curl_easy_setopt(curl.get(), CURLOPT_WRITEFUNCTION, WriteFileCallback);
-    curl_easy_setopt(curl.get(), CURLOPT_WRITEDATA, file.get());
+    curl_easy_setopt(handle, CURLOPT_URL, (const char*)url);
+    curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, WriteFileCallback);
+    curl_easy_setopt(handle, CURLOPT_WRITEDATA, file.get());
 
-    curl_easy_setopt(curl.get(), CURLOPT_FOLLOWLOCATION, 1L);
+    curl_easy_setopt(handle, CURLOPT_FOLLOWLOCATION, 1L);
 
-    curl_easy_perform(curl.get());
+    curl_easy_perform(handle);
 
     return true;
 }
